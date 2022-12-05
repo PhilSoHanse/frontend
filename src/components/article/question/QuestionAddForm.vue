@@ -13,7 +13,7 @@
       ></b-form-input>
       <b-form-textarea
         class="mt-2"
-        v-model="contents"
+        v-model="content"
         placeholder="내용을 입력해 주세요"
         rows="15"
         max-rows="6"
@@ -21,7 +21,7 @@
       <b-form-tags
         class="mt-2"
         input-id="tags-pills"
-        v-model="tag"
+        v-model="hashtag"
         tag-variant="primary"
         tag-pills
         size="lg"
@@ -30,7 +30,9 @@
         remove-on-delete
         duplicateTagText="중복된 입력입니다"
       ></b-form-tags>
-      <b-button class="float-right mt-2" variant="info">등록</b-button>
+      <b-button class="float-right mt-2" variant="info" @click="addQuestion"
+        >등록</b-button
+      >
       <b-button class="float-right mt-2 m-1" variant="outline-info"
         >취소</b-button
       >
@@ -39,13 +41,29 @@
 </template>
 
 <script>
+import { createQuestion } from '@/api/article/questions';
 export default {
   data() {
     return {
       title: '',
-      contents: '',
-      tag: [],
+      content: '',
+      hashtag: [],
     };
+  },
+  methods: {
+    async addQuestion() {
+      try {
+        const response = await createQuestion({
+          title: this.title,
+          content: this.content,
+          hashtag: this.hashtag,
+        });
+        this.$router.push('/home');
+        console.log(response);
+      } catch (error) {
+        console.log(error.response.data.message);
+      }
+    },
   },
 };
 </script>
