@@ -27,6 +27,11 @@ export default new VueRouter({
       component: () => import('@/views/Article/Question/QuestionAddPage.vue'),
     },
     {
+      path: '/community/question/:id',
+      component: () =>
+        import('@/views/Article/Question/QuestionDetailPage.vue'),
+    },
+    {
       path: '*',
       component: () => import('@/views/NotFoundPage.vue'),
     },
