@@ -18,4 +18,14 @@ function fetchQuestionListByStatus(status) {
   return instanceWithAuth.get(`/community/question?completion=${status}`);
 }
 
-export { createQuestion, fetchQuestionList, fetchQuestionListByStatus };
+// 질문 상세 페이지를 조회하는 API
+function fetchQuestionDetail(index) {
+  return instanceWithAuth.get(`/community/question/${index}`);
+}
+
+export {
+  createQuestion,
+  fetchQuestionList,
+  fetchQuestionListByStatus,
+  fetchQuestionDetail,
+};
