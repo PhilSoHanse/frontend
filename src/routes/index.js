@@ -19,7 +19,11 @@ export default new VueRouter({
       component: () => import('@/views/CallBackPage.vue'),
     },
     {
-      path: '/questions/add',
+      path: '/community/question',
+      component: () => import('@/views/Article/Question/QuestionListPage.vue'),
+    },
+    {
+      path: '/community/question/add',
       component: () => import('@/views/Article/Question/QuestionAddPage.vue'),
     },
     {
