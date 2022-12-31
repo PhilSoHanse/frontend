@@ -36,5 +36,10 @@ export default new Vuex.Store({
       commit('setAccessToken', response.headers['access-token']);
       commit('setRefreshToken', response.headers['refresh-token']);
     },
+    async LOGOUT({ commit }) {
+      commit('setProfileImageUrl', null);
+      commit('setAccessToken', null);
+      commit('setRefreshToken', null);
+    },
   },
 });

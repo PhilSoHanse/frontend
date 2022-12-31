@@ -1,18 +1,10 @@
 <template>
   <div id="app" class="mx-auto">
-    <div>
+    <div v-show="!isPlayground()">
       <b-tabs content-class="mt-3">
         <b-tab title="전체" active @click="fetchAllData"></b-tab>
-        <b-tab
-          title="미해결"
-          active
-          @click="fetchDataByStatus('incomplete')"
-        ></b-tab>
-        <b-tab
-          title="해결됨"
-          active
-          @click="fetchDataByStatus('complete')"
-        ></b-tab>
+        <b-tab title="미해결" @click="fetchDataByStatus('incomplete')"></b-tab>
+        <b-tab title="해결됨" @click="fetchDataByStatus('complete')"></b-tab>
       </b-tabs>
     </div>
     <div>
@@ -60,7 +52,7 @@ export default {
           label: '제목',
         },
         {
-          key: 'writerName',
+          key: 'writerNickname',
           label: '작성자',
         },
         {
@@ -95,10 +87,13 @@ export default {
         path: `/community/${this.type}/${item.id}`,
       });
     },
+    isPlayground() {
+      return this.type == 'playground';
+    },
   },
   created() {
-    this.fetchAllData();
     this.type = this.$route.params.type;
+    this.fetchAllData();
   },
 };
 </script>
