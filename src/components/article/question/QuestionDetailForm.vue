@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { fetchQuestionDetail } from '@/api/article/questions';
+import { fetchDetail } from '@/api/article/articles';
 export default {
   data() {
     return {
@@ -36,7 +36,10 @@ export default {
   },
   methods: {
     async fetchData() {
-      const { data } = await fetchQuestionDetail(this.$route.params.id);
+      const { data } = await fetchDetail(
+        this.$route.params.type,
+        this.$route.params.id,
+      );
       console.log(this.id);
       this.item = data;
     },

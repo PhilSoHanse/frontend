@@ -1,14 +1,31 @@
 <template>
   <div>
     <b-navbar toggleable="lg" type="dark" variant="info">
-      <b-navbar-brand href="#">Noriter</b-navbar-brand>
+      <b-navbar-brand @click="routeCommunityPage('playground')"
+        >Noriter</b-navbar-brand
+      >
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <b-nav-item href="#">Link</b-nav-item>
-          <b-nav-item href="#" disabled>Disabled</b-nav-item>
+          <b-dropdown
+            size="lg"
+            id="community"
+            text="커뮤니티"
+            class="m-md-2"
+            variant="info"
+          >
+            <b-dropdown-item @click="routeCommunityPage('playground')"
+              >자유 게시판</b-dropdown-item
+            >
+            <b-dropdown-item @click="routeCommunityPage('question')"
+              >질문 게시판</b-dropdown-item
+            >
+            <b-dropdown-item @click="routeCommunityPage('gathering')"
+              >스터디 게시판</b-dropdown-item
+            >
+          </b-dropdown>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
@@ -26,7 +43,7 @@
           <b-nav-form>
             <b-button
               v-if="!isUserLogin"
-              to="login"
+              to="/login"
               size="sm"
               class="my-2 my-sm-0"
               type="submit"
@@ -50,6 +67,11 @@ export default {
   computed: {
     isUserLogin() {
       return this.$store.getters.isLogin;
+    },
+  },
+  methods: {
+    routeCommunityPage(type) {
+      this.$router.push(`/community/${type}`);
     },
   },
 };

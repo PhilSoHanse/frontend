@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-card
-      header="질문 작성하기"
+      header="글 작성하기"
       style="max-width: 50rem; margin: auto; margin-top: 10vh"
       class="mb-2"
       border-variant="info"
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { createQuestion } from '@/api/article/questions';
+import { create } from '@/api/article/articles';
 export default {
   data() {
     return {
@@ -53,7 +53,7 @@ export default {
   methods: {
     async addQuestion() {
       try {
-        const response = await createQuestion({
+        const response = await create(this.$route.params.type, {
           title: this.title,
           content: this.content,
           hashtag: this.hashtag,
@@ -61,7 +61,8 @@ export default {
         this.$router.push('/home');
         console.log(response);
       } catch (error) {
-        console.log(error.response.data.message);
+        console.log(error.response.data);
+        // console.log(error.response.data.message);
       }
     },
   },
