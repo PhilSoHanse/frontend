@@ -10,7 +10,7 @@
       <div class="mt-3" rows="15" max-rows="6">{{ item.content }}</div>
       <div
         class="badge badge-pill badge-primary mt-4 mr-1"
-        v-for="tag in item.hashtag"
+        v-for="tag in item.hashtags"
         :key="tag"
       >
         #{{ tag }}

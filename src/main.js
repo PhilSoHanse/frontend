@@ -7,7 +7,7 @@ import VueCookies from 'vue-cookies';
 
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
-Vue.use(VueCookies, { expires: '7d' });
+Vue.use(VueCookies, { expires: '1d' });
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
