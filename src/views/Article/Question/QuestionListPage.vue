@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="mx-auto">
-    <div v-show="!isPlayground()">
+    <div v-show="!this.type == 'playground'">
       <b-tabs content-class="mt-3">
         <b-tab title="전체" active @click="fetchAllData"></b-tab>
         <b-tab title="미해결" @click="fetchDataByStatus('incomplete')"></b-tab>
@@ -22,7 +22,9 @@
       </b-table>
     </div>
 
-    <b-button variant="primary float-right" size="sm">글쓰기</b-button>
+    <b-button variant="primary float-right" size="sm" @click="routeAddForm"
+      >글쓰기</b-button
+    >
 
     <b-pagination
       v-model="currentPage"
@@ -59,11 +61,11 @@ export default {
           key: 'writtenTime',
           label: '작성시간',
           formatter: time => {
-            return dayjs(time).format('YYYY-MM-DD');
+            return dayjs(time).format('YYYY-MM-DD HH:mm');
           },
         },
         {
-          key: 'hashtag',
+          key: 'hashtags',
           label: '해시태그',
         },
       ],
@@ -71,6 +73,7 @@ export default {
       currentPage: 1,
       type: '',
       items: [],
+      showTabs: '',
     };
   },
   methods: {
@@ -82,13 +85,13 @@ export default {
       const { data } = await fetchListByStatus(this.type, status);
       this.items = data;
     },
+    routeAddForm() {
+      this.$router.push(`/community/${this.type}/add`);
+    },
     rowClick(item) {
       this.$router.push({
         path: `/community/${this.type}/${item.id}`,
       });
-    },
-    isPlayground() {
-      return this.type == 'playground';
     },
   },
   created() {

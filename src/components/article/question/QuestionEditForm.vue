@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-card
-      header="글 작성하기"
+      header="글 수정하기"
       style="max-width: 50rem; margin: auto; margin-top: 10vh"
       class="mb-2"
       border-variant="info"
@@ -21,7 +21,7 @@
       <b-form-tags
         class="mt-2"
         input-id="tags-pills"
-        v-model="hashtags"
+        v-model="hashtag"
         tag-variant="primary"
         tag-pills
         size="lg"
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { create } from '@/api/article/articles';
+import { fetchDetail, edit } from '@/api/article/articles';
 export default {
   data() {
     return {
@@ -51,20 +51,30 @@ export default {
     };
   },
   methods: {
-    async addQuestion() {
+    async editArticle() {
       try {
-        const response = await create(this.$route.params.type, {
-          title: this.title,
-          content: this.content,
-          hashtags: this.hashtags,
-        });
+        const response = await edit(
+          this.$router.params.type,
+          this.$router.params.id,
+          {
+            title: this.title,
+            content: this.content,
+            hashtags: this.hashtags,
+          },
+        );
         this.$router.push('/home');
         console.log(response);
       } catch (error) {
-        console.log(error.response.data);
-        // console.log(error.response.data.message);
+        console.log(error.response.data.message);
       }
     },
+  },
+  async created() {
+    const id = this.$router.params.id;
+    const { data } = await fetchDetail(id);
+    this.title = data.title;
+    this.content = data.content;
+    this.hashtags = data.hashtags;
   },
 };
 </script>
