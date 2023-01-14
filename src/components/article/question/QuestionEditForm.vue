@@ -21,7 +21,7 @@
       <b-form-tags
         class="mt-2"
         input-id="tags-pills"
-        v-model="hashtag"
+        v-model="hashtags"
         tag-variant="primary"
         tag-pills
         size="lg"
@@ -30,7 +30,7 @@
         remove-on-delete
         duplicateTagText="중복된 입력입니다"
       ></b-form-tags>
-      <b-button class="float-right mt-2" variant="info" @click="addQuestion"
+      <b-button class="float-right mt-2" variant="info" @click="editArticle"
         >등록</b-button
       >
       <b-button class="float-right mt-2 m-1" variant="outline-info"
@@ -48,30 +48,28 @@ export default {
       title: '',
       content: '',
       hashtags: [],
+      type: '',
+      id: '',
     };
   },
   methods: {
     async editArticle() {
       try {
-        const response = await edit(
-          this.$router.params.type,
-          this.$router.params.id,
-          {
-            title: this.title,
-            content: this.content,
-            hashtags: this.hashtags,
-          },
-        );
-        this.$router.push('/home');
-        console.log(response);
+        await edit(this.type, this.id, {
+          title: this.title,
+          content: this.content,
+          hashtags: this.hashtags,
+        });
+        this.$router.push(`/community/${this.type}/${this.id}`);
       } catch (error) {
-        console.log(error.response.data.message);
+        console.log(error.response);
       }
     },
   },
   async created() {
-    const id = this.$router.params.id;
-    const { data } = await fetchDetail(id);
+    this.type = this.$router.history.current.params.type;
+    this.id = this.$router.history.current.params.id;
+    const { data } = await fetchDetail(this.type, this.id);
     this.title = data.title;
     this.content = data.content;
     this.hashtags = data.hashtags;

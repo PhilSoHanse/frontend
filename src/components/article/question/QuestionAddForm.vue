@@ -58,11 +58,11 @@ export default {
           content: this.content,
           hashtags: this.hashtags,
         });
-        this.$router.push('/home');
-        console.log(response);
+        this.$router.push(
+          `/community/${this.$route.params.type}/${response.data}`,
+        );
       } catch (error) {
-        console.log(error.response.data);
-        // console.log(error.response.data.message);
+        console.log(error.response.data.message);
       }
     },
   },
