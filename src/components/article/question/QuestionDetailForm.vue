@@ -15,8 +15,12 @@
       >
         #{{ tag }}
       </div>
-      <b-button class="float-right mt-2" variant="info" @click="addQuestion"
-        >등록</b-button
+      <b-button
+        v-show="this.item.sameWriter"
+        class="float-right mt-2"
+        variant="info"
+        @click="routeEditForm"
+        >수정</b-button
       >
       <b-button class="float-right mt-2 m-1" variant="outline-info"
         >취소</b-button
@@ -31,7 +35,6 @@ export default {
   data() {
     return {
       item: [],
-      id: '',
     };
   },
   methods: {
@@ -40,8 +43,13 @@ export default {
         this.$route.params.type,
         this.$route.params.id,
       );
-      console.log(this.id);
       this.item = data;
+    },
+
+    routeEditForm() {
+      this.$router.push(
+        `/community/${this.$route.params.type}/${this.$route.params.id}/edit`,
+      );
     },
   },
   created() {

@@ -32,6 +32,10 @@ export default new VueRouter({
         import('@/views/Article/Question/QuestionDetailPage.vue'),
     },
     {
+      path: '/community/:type/:id/edit',
+      component: () => import('@/views/Article/Question/QuestionEditPage.vue'),
+    },
+    {
       path: '*',
       component: () => import('@/views/NotFoundPage.vue'),
     },
