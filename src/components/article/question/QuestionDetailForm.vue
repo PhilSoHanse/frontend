@@ -22,8 +22,11 @@
         @click="routeEditForm"
         >수정</b-button
       >
-      <b-button class="float-right mt-2 m-1" variant="outline-info"
-        >취소</b-button
+      <b-button
+        class="float-right mt-2 m-1"
+        variant="outline-info"
+        @click="goback"
+        >목록</b-button
       >
     </b-card>
   </div>
@@ -45,11 +48,13 @@ export default {
       );
       this.item = data;
     },
-
     routeEditForm() {
       this.$router.push(
         `/community/${this.$route.params.type}/${this.$route.params.id}/edit`,
       );
+    },
+    goback() {
+      this.$router.go(-1);
     },
   },
   created() {
