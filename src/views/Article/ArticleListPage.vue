@@ -63,11 +63,6 @@ export default {
     routeAddForm() {
       this.$router.push(`/community/${this.type}/add`);
     },
-    rowClick(item) {
-      this.$router.push({
-        path: `/community/${this.type}/${item.id}`,
-      });
-    },
   },
   created() {
     this.type = this.$route.params.type;

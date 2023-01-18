@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-1">
+  <div class="mt-1" @click="rowClick">
     <b-card :title="item.title">
       <b-card-text>
         {{ item.content }}
@@ -29,7 +29,14 @@ export default {
       required: true,
     },
   },
+  methods: {
+    rowClick() {
+      this.$router.push({
+        path: `/community/${this.$route.params.type}/${this.item.id}`,
+      });
+    },
+  },
 };
 </script>
 
-<style></style>
+<style></style> 
