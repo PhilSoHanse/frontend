@@ -33,7 +33,10 @@
       <b-button class="float-right mt-2" variant="info" @click="addQuestion"
         >등록</b-button
       >
-      <b-button class="float-right mt-2 m-1" variant="outline-info"
+      <b-button
+        class="float-right mt-2 m-1"
+        variant="outline-info"
+        @click="goback"
         >취소</b-button
       >
     </b-card>
@@ -64,6 +67,9 @@ export default {
       } catch (error) {
         console.log(error.response.data.message);
       }
+    },
+    goback() {
+      this.$router.go(-1);
     },
   },
 };
