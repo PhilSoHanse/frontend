@@ -20,20 +20,19 @@ export default new VueRouter({
     },
     {
       path: '/community/:type',
-      component: () => import('@/views/Article/Question/QuestionListPage.vue'),
+      component: () => import('@/views/Article/ArticleListPage.vue'),
     },
     {
       path: '/community/:type/add',
-      component: () => import('@/views/Article/Question/QuestionAddPage.vue'),
+      component: () => import('@/views/Article/Question/ArticleAddPage.vue'),
     },
     {
       path: '/community/:type/:id',
-      component: () =>
-        import('@/views/Article/Question/QuestionDetailPage.vue'),
+      component: () => import('@/views/Article/Question/ArticleDetailPage.vue'),
     },
     {
       path: '/community/:type/:id/edit',
-      component: () => import('@/views/Article/Question/QuestionEditPage.vue'),
+      component: () => import('@/views/Article/Question/ArticleEditPage.vue'),
     },
     {
       path: '*',

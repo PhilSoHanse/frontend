@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="mx-auto">
-    <div v-show="!this.type == 'playground'">
+    <div v-show="this.type !== 'playground'">
       <b-tabs content-class="mt-3">
         <b-tab title="전체" active @click="fetchAllData"></b-tab>
         <b-tab title="미해결" @click="fetchDataByStatus('incomplete')"></b-tab>
@@ -94,8 +94,9 @@ export default {
       });
     },
   },
-  created() {
+  mounted() {
     this.type = this.$route.params.type;
+    console.log(this.type);
     this.fetchAllData();
   },
 };
