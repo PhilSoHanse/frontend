@@ -1,26 +1,51 @@
-name: Front build workflow # workflow 이름
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-on:  # workflow 실행 조건
+name: Node.js CI
+
+on:
   push:
-    branches:
-      - fe-deploy
+    branches: [ "fe-deploy" ]
+  pull_request:
+    branches: [ "fe-deploy" ]
 
+jobs:
+  build:
 
-jobs: # job 설정
-  test: # job id
-    name: Hello test job! # job 이름
-    runs-on: ubuntu-20.04 # job 가상환경
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
     steps:
-      - name: check ls
-        run: ls -al # checkout 하기전 확인
-      - name: checkout Github Action # step 이름
-        uses: actions/checkout@v3 # github actions 가상 환경에 해당 레포 소스 가져오기
-      - name: after actions/checkout ls
-        run: ls -al # checkout 후 확인
-      - name: job - test echo 
-        run: echo "Hello test job!"
+      - name: checkout Github Action
+        uses: actions/checkout@v3
 
-      # GitHub Actions CLI 환경에서 S3 사용자 권한의 aws 접속
+      # npm package cache 사용하기 : https://github.com/actions/cache/blob/main/examples.md#node---npm
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        run: |
+          echo "::set-output name=dir::$(npm config get cache)"
+      - uses: actions/cache@v3
+        id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # npm ci는 npm install과 같은 기능을 수행한다. 자세한 내용은 아래 링크 참조.
+      - name: install npm dependencies
+        run: npm ci
+
+      # --if-present 옵션은 npm 스크립트가 존재할 때만 실행시키라는 의미이다.
+      # 만약 build 스크립트가 없는 경우, 오류 없이 지나간다.
+      - name: vue build
+        run: npm run build --if-present
+
+      # aws user 연결
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -28,10 +53,10 @@ jobs: # job 설정
           aws-secret-access-key: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY_ID }}
           aws-region: ap-northeast-2
 
-
       # react 빌드한 /build를 s3로 업로드
-      - name: Upload /build to S3
-        env:
-          BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME}}
-        run: |
-          aws s3 cp --recursive --region ap-northeast-2 build s3://$BUCKET_NAME
+      - name: Upload to S3
+        run: aws s3 sync ./build ${{ secrets.AWS_S3_URL}} --delete
+
+      # 업로드한 s3 파일을 각 CDN 캐시 무효화하여 리프레시 하기
+      - name: CloudFront Invalidation
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT_ID}} --paths /*
