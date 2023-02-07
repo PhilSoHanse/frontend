@@ -11,7 +11,9 @@ export default {
 
   methods: {
     buttonClick: async function () {
-      window.location.replace('http://localhost:8080/github/login/form');
+      window.location.replace(
+        process.env.VUE_APP_API_URL + '/github/login/form',
+      );
     },
   },
 };
