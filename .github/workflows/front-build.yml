@@ -1,0 +1,37 @@
+name: Front build workflow # workflow 이름
+
+on:  # workflow 실행 조건
+  push:
+    branches:
+      - fe-deploy
+
+
+jobs: # job 설정
+  test: # job id
+    name: Hello noriter-front job! # job 이름
+    runs-on: ubuntu-20.04 # job 가상환경
+    steps:
+      - name: check ls
+        run: ls -al # checkout 하기전 확인
+      - name: checkout Github Action # step 이름
+        uses: actions/checkout@v3 # github actions 가상 환경에 해당 레포 소스 가져오기
+      - name: after actions/checkout ls
+        run: ls -al # checkout 후 확인
+      - name: job - test echo 
+        run: echo "Hello noriter-front job!"
+
+# GitHub Actions CLI 환경에서 S3 사용자 권한의 aws 접속
+- name: Configure AWS credentials 
+  uses: aws-actions/configure-aws-credentials@v1 
+  with: 
+    aws-access-key-id: ${{ secrets.AWS_S3_ACCESS_KEY_ID }} 
+    aws-secret-access-key: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY_ID }} 
+    aws-region: ap-northeast-2
+
+
+# react 빌드한 /build를 s3로 업로드
+- name: Upload /build to S3
+  env:
+    BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME}}
+  run: |
+    aws s3 cp --recursive --region ap-northeast-2 build s3://$BUCKET_NAME
